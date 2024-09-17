@@ -3,36 +3,42 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Model Viewer</title>
+    <title>WebXR Auto-Entry</title>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
       body {
-        font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
         height: 100vh;
-        background-color: #f0f0f0;
-      }
-      h1 {
-        margin-bottom: 20px;
-        text-align: center;
+        background-color: #000;
       }
       model-viewer {
         width: 100%;
-        height: 500px;
-        max-width: 600px;
+        height: 100%;
+      }
+      #enter-xr {
+        display: none;
+        background: #fff;
+        padding: 20px;
+        border: none;
+        font-size: 18px;
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
     </style>
   </head>
   <body>
-    <h1>Visualização 3D no Navegador - testando agora 16/09/2024 15:25 </h1>
+    <!-- Model Viewer with WebXR support -->
     <model-viewer
-      src="https://drive.google.com/uc?export=download&id=1-UQtsO5uxPBHs9babJFU-6T5oDX74osx"
-      ios-src="https://drive.google.com/uc?export=download&id=1-W01UJK1wngHhWRXA5dV1iXdVmBjPe-g"
+      id="xr-viewer"
+      src="https://raw.githubusercontent.com/llshb/LL-Art-360---Logo-3D/main/Logo_LLArt360_3D(android).glb"
+      ios-src="https://raw.githubusercontent.com/llshb/LL-Art-360---Logo-3D/main/Logo_LLArt360_3D(ios).usdz"
       alt="Um modelo 3D para visualização"
       ar
       ar-modes="scene-viewer webxr quick-look"
@@ -40,15 +46,49 @@
       auto-rotate
       shadow-intensity="1"
       exposure="1"
-      style="width: 100%; height: 500px;">
+      style="width: 100%; height: 100%; display: none;">
     </model-viewer>
+
+    <!-- Fallback button to manually enter XR -->
+    <button id="enter-xr">Clique para entrar em AR</button>
+
+    <script>
+      const modelViewer = document.getElementById('xr-viewer');
+      const enterXRButton = document.getElementById('enter-xr');
+
+      // Verifica se o dispositivo suporta WebXR
+      modelViewer.addEventListener('ar-status', (event) => {
+        if (event.detail.status === 'failed') {
+          console.log("WebXR não é suportado neste dispositivo.");
+        }
+      });
+
+      // Tenta ativar o modo AR automaticamente quando o usuário interagir com a página
+      function activateXR() {
+        if (modelViewer.canActivateAR) {
+          modelViewer.activateAR();
+        } else {
+          enterXRButton.style.display = 'block';
+        }
+      }
+
+      // Entrar em XR quando o botão for clicado
+      enterXRButton.addEventListener('click', () => {
+        modelViewer.activateAR();
+        enterXRButton.style.display = 'none'; // Oculta o botão após entrar no modo AR
+      });
+
+      // Detecta a primeira interação do usuário para tentar ativar o XR
+      window.addEventListener('click', () => {
+        activateXR();
+      });
+
+      // Ocultar o botão se WebXR puder ser ativado
+      if (modelViewer.canActivateAR) {
+        enterXRButton.style.display = 'none';
+      } else {
+        enterXRButton.style.display = 'block';
+      }
+    </script>
   </body>
 </html>
-
-Android
-
-
-Ios
-
-
-
