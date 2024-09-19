@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebXR Auto-Entry with 10% Screen Size</title>
+    <title>WebXR Auto-Entry</title>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
       body {
@@ -34,7 +34,7 @@
     </style>
   </head>
   <body>
-    <!-- Model Viewer com suporte a WebXR e AR -->
+    <!-- Model Viewer with WebXR support -->
     <model-viewer
       id="xr-viewer"
       src="https://raw.githubusercontent.com/llshb/LL-Art-360---Logo-3D/main/Logo_LLArt360_3D(android).glb"
@@ -48,6 +48,7 @@
       exposure="1"
       ar-placement="floor"   <!-- Fixar o modelo na superfície detectada -->
       interaction-prompt="tap-to-place" <!-- Prompt para tocar e posicionar -->
+      ar-scale="fixed"       <!-- Mantém a escala fixa no ambiente -->
       style="width: 100%; height: 100%; display: none;">
     </model-viewer>
 
@@ -57,26 +58,6 @@
     <script>
       const modelViewer = document.getElementById('xr-viewer');
       const enterXRButton = document.getElementById('enter-xr');
-
-      // Função para calcular o tamanho do modelo com base na tela
-      function adjustModelSize() {
-        // Calcula 10% da altura da tela do dispositivo
-        const screenHeight = window.innerHeight;
-        const screenWidth = window.innerWidth;
-        const modelSizePercentage = 0.10; // 10%
-
-        // Tamanho alvo do modelo 3D
-        const targetSize = screenHeight * modelSizePercentage;
-        const aspectRatio = screenWidth / screenHeight;
-
-        // Ajuste da escala do modelo para ocupar 10% da tela
-        const scaleFactor = targetSize / 100; // Fator de escala baseado na altura da tela
-        const scaleValue = `${scaleFactor} ${scaleFactor} ${scaleFactor}`; // Escala uniforme
-
-        modelViewer.setAttribute('scale', scaleValue); // Aplica a escala no model-viewer
-
-        console.log(`Modelo ajustado para 10% da tela: ${scaleValue}`);
-      }
 
       // Detecta se a experiência AR falhou ou não
       modelViewer.addEventListener('ar-status', (event) => {
@@ -90,7 +71,8 @@
         if (event.detail.status === 'tracking') {
           console.log("Modelo ancorado em uma superfície.");
           modelViewer.setAttribute('style', 'width: 100%; height: 100%; display: block;');
-          adjustModelSize(); // Chama a função para ajustar o tamanho do modelo 3D
+          // Força o posicionamento inicial no centro da tela
+          modelViewer.cameraOrbit = "0deg 90deg 2m"; // Exibe o modelo à frente da câmera
         }
       });
 
