@@ -34,7 +34,7 @@
     </style>
   </head>
   <body>
-    <!-- Model Viewer com suporte a WebXR e AR -->
+    <!-- Model Viewer with WebXR support -->
     <model-viewer
       id="xr-viewer"
       src="https://raw.githubusercontent.com/llshb/LL-Art-360---Logo-3D/main/Logo_LLArt360_3D(android).glb"
@@ -46,13 +46,13 @@
       auto-rotate
       shadow-intensity="1"
       exposure="1"
-      ar-placement="floor" <!-- Fixar o modelo no chão -->
-      interaction-prompt="tap-to-place" <!-- Permite que o usuário toque para posicionar -->
-      ar-scale="fixed" <!-- Escala fixa do modelo no ambiente -->
-      style="width: 100%; height: 100%;">
+      scale="0.0000000000001 0.0000000000001 0.0000000000001"  <!-- Reduzir o tamanho em 5x -->
+      camera-orbit="0deg 90deg 1.5m" <!-- Posicionar o objeto diretamente à frente da câmera, a 2 metros -->
+      field-of-view="30deg"  <!-- Ajustar o campo de visão para 30 graus -->
+      style="width: 100%; height: 100%; display: none;">
     </model-viewer>
 
-    <!-- Botão alternativo para ativar o AR manualmente -->
+    <!-- Fallback button to manually enter XR -->
     <button id="enter-xr"> AR Viewer </button>
 
     <script>
